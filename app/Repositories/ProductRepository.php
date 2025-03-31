@@ -36,7 +36,7 @@ class ProductRepository
         $this->entityManager->flush();
     }
 
-    public function findPaginated(int $page = 1, int $limit = 10): array
+  public function findPaginated(int $page = 1, int $limit = 10): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('p')

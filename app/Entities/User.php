@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entities\PersonalAccessToken;
 
 #[ORM\Entity]
 #[ORM\Table(name: "users")]
@@ -137,5 +138,28 @@ class User implements UserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    public function createToken(string $name, array $abilities = ['*']): PersonalAccessToken
+    {
+        $token = new PersonalAccessToken();
+        $token->setToken(bin2hex(random_bytes(40)));
+        $token->setUserId($this->getId());
+        $token->setAbilities($abilities);
+        $token->setCreatedAt(new \DateTime());
+    
+        $this->entityManager->persist($token);
+        $this->entityManager->flush();
+    
+        return $token;
+    }
+    
+
+    public function checkToken(string $providedToken): ?PersonalAccessToken
+    {
+        $tokenRepository = $this->entityManager->getRepository(PersonalAccessToken::class);
+        $token = $tokenRepository->findOneBy(['token' => $providedToken]);
+
+        return $token && $token->getUserId() === $this->getId() ? $token : null;
     }
 }

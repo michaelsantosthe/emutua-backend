@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Entities\Product;
+use App\Entities\User;
 use App\Http\Controllers\Controller;
 use App\Repositories\ProductRepository;
 use App\Http\Requests\Product\ProductRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ProductController extends Controller
 {
+    private EntityManagerInterface $entityManager;
     private ProductRepository $productRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository, EntityManagerInterface $entityManager)
     {
         $this->productRepository = $productRepository;
+        $this->entityManager = $entityManager;
     }
     /**
      * Display a listing of the resource.
@@ -23,9 +29,13 @@ class ProductController extends Controller
     {
         $page = max(1, (int) $request->query('page', 1));
         $limit = max(1, (int) $request->query('limit', 10));
-
+    
         $products = $this->productRepository->findPaginated($page, $limit);
-
+    
+        if (empty($products)) {
+            return response()->json(['message' => 'Nenhum produto encontrado', 'page' => $page, 'limit' => $limit], 200);
+        }
+    
         return response()->json($products);
     }
 
@@ -35,6 +45,9 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validated = $request->validated();
+        
+        $userId = Auth::id();
+        $user = $this->entityManager->getReference(User::class, $userId);
 
         $product = new Product(
             $validated['name'],
@@ -42,10 +55,11 @@ class ProductController extends Controller
             $validated['price'],
             $validated['category'],
             $validated['quantity'],
-            auth()->id()
+            $user
         );
+        
         $this->productRepository->save($product);
-
+    
         return response()->json($product, 201);
     }
 
@@ -98,5 +112,9 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Produto não encontrado.'], 404);
         }
+
+        $this->productRepository->delete($product);
+
+        return response()->json(['message' => 'Produto deletado com sucesso.'], 200);
     }
 }

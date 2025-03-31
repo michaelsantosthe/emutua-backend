@@ -3,10 +3,11 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\Entity]
 #[ORM\Table(name: "products")]
-class Product
+class Product implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,14 +36,27 @@ class Product
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTime $deleted_at = null;
 
-    public function __construct(string $name, string $description, float $price, string $category, int $quantity, string $user_id)
-    {
+    public function __construct($name, $description, $price, $category, $quantity, User $user) {
         $this->name = $name;
         $this->description = $description;
         $this->price = $price;
         $this->category = $category;
         $this->quantity = $quantity;
-        $this->user_id = $user_id;
+        $this->user = $user;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'price' => $this->getPrice(),
+            'category' => $this->getCategory(),
+            'quantity' => $this->getQuantity(),
+            'user_id' => $this->getUser()->getId(),
+            'deleted_at' => $this->getDeletedAt() ? $this->getDeletedAt()->format('Y-m-d H:i:s') : null,
+        ];
     }
 
     public function updateWithValidatedData(array $data): void
