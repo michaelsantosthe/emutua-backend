@@ -141,8 +141,8 @@ Agora seu backend está pronto para uso!
 
 A solução backend foi desenvolvida utilizando Laravel 12 com PHP 8.4, optando por esse stack devido à robustez e flexibilidade do Laravel para lidar com a construção de APIs e integração com o banco de dados. O Laravel oferece ferramentas poderosas para autenticação, validação e migrações, além de ser fácil de escalar e manter.
 
-ORM (Eloquent)
-Escolhemos o Laravel Eloquent ORM para manipulação de dados no banco, o que permite interagir com o banco de dados de forma mais intuitiva e sem a necessidade de escrever consultas SQL complexas. O Eloquent simplifica a criação de relacionamentos entre modelos e facilita a manutenção do código, além de garantir performance nas consultas, uma vez que ele já otimiza diversas operações no banco.
+ORM (Doctrine)
+Escolhemos o Laravel Doctrine ORM para manipulação de dados no banco, o que permite interagir com o banco de dados de forma mais intuitiva e sem a necessidade de escrever consultas SQL complexas. O Doctrine simplifica a criação de relacionamentos entre modelos e facilita a manutenção do código, além de garantir performance nas consultas, uma vez que ele já otimiza diversas operações no banco.
 
 Estrutura de Pastas
 A estrutura de pastas foi configurada conforme as melhores práticas do Laravel. Cada tipo de componente tem sua pasta dedicada:
