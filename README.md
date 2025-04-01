@@ -137,3 +137,36 @@ O token gerado deve ser usado para autenticar as requisições subsequentes.
 
 Agora seu backend está pronto para uso!
 
+## Descrição Técnica
+
+A solução backend foi desenvolvida utilizando Laravel 12 com PHP 8.4, optando por esse stack devido à robustez e flexibilidade do Laravel para lidar com a construção de APIs e integração com o banco de dados. O Laravel oferece ferramentas poderosas para autenticação, validação e migrações, além de ser fácil de escalar e manter.
+
+ORM (Eloquent)
+Escolhemos o Laravel Eloquent ORM para manipulação de dados no banco, o que permite interagir com o banco de dados de forma mais intuitiva e sem a necessidade de escrever consultas SQL complexas. O Eloquent simplifica a criação de relacionamentos entre modelos e facilita a manutenção do código, além de garantir performance nas consultas, uma vez que ele já otimiza diversas operações no banco.
+
+Estrutura de Pastas
+A estrutura de pastas foi configurada conforme as melhores práticas do Laravel. Cada tipo de componente tem sua pasta dedicada:
+
+Controllers: Responsáveis pelo processamento das requisições HTTP.
+
+Entities: Modelos que representam as tabelas do banco de dados, gerenciando interações com o banco de dados.
+
+Migrations: Definem e controlam a estrutura do banco de dados.
+
+Seeders: Usados para preencher o banco com dados iniciais, como o usuário de autenticação.
+
+Routes: Arquivo de rotas para definir as APIs de forma clara e organizada.
+
+Essa organização facilita a escalabilidade e a manutenção, permitindo que novas funcionalidades sejam adicionadas sem a necessidade de reorganizar o projeto.
+
+Padrões de Código
+Seguir os padrões de código do Laravel foi uma escolha importante para garantir que o código seja legível, fácil de entender e seguir por outros desenvolvedores. Usamos o padrão PSR-4 para autoloading, o que facilita a organização dos arquivos, e mantivemos as convenções de nomenclatura do Laravel, como camelCase para variáveis e PascalCase para classes.
+
+Autenticação
+Para autenticação, foi utilizado o Laravel Sanctum, que é uma solução simples e leve para autenticação de APIs. Essa abordagem foi escolhida devido à simplicidade de implementação e ao fato de ser adequada para projetos que não exigem a complexidade de autenticação baseada em OAuth. O Sanctum permite gerar tokens para autenticar as requisições de maneira eficiente.
+
+Banco de Dados
+O banco de dados é configurado para rodar dentro de um container Docker com MySQL. Isso garante uma configuração rápida e simples, além de permitir que o banco de dados seja facilmente replicado em outros ambientes. O Docker Compose foi utilizado para gerenciar o container de MySQL e a configuração do banco, tornando o ambiente de desenvolvimento mais ágil.
+
+
+
